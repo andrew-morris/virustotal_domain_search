@@ -17,4 +17,10 @@ parameters = {'domain':domain,'apikey':apikey}
 response = urllib.urlopen('%s?%s' % (url, urllib.urlencode(parameters))).read()
 response_dict = json.loads(response)
 
-pprint.pprint(response_dict)
+if response_dict["response_code"] == 0:
+  print "[-] FAIL: " + domain + " not found."
+else:
+  print "[+] SUCCESS: " + domain + " found."
+
+#pprint.pprint(response_dict)
+
