@@ -17,10 +17,14 @@ parameters = {'domain':domain,'apikey':apikey}
 response = urllib.urlopen('%s?%s' % (url, urllib.urlencode(parameters))).read()
 response_dict = json.loads(response)
 
-if response_dict["response_code"] == 0:
-  print "[-] FAIL: " + domain + " not found."
-else:
-  print "[+] SUCCESS: " + domain + " found."
+try:
+  if response_dict["response_code"] == 1 and len(response_dict["detected_communicating_samples"]) >= 1:
+    for hashes in response_dict["detected_communicating_samples"]:
+      print "[+] %s:%s" % ( domain, hashes["sha256"] )
+  else:
+    print "[-] %s: No samples found" % domain
+except KeyError:
+    print "[-] %s: No samples found" % domain
 
 #pprint.pprint(response_dict)
 
